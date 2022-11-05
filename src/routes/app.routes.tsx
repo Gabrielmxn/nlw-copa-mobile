@@ -5,6 +5,7 @@ import { New } from "../screens/New";
 import { useTheme } from 'native-base';
 import { Platform } from 'react-native';
 import { Find } from "../screens/Find";
+import { Details } from "../screens/Details";
 
  const { Navigator, Screen } = createBottomTabNavigator();
 
@@ -55,6 +56,16 @@ import { Find } from "../screens/Find";
         tabBarButton: () => null
         }}
       />
+
+      <Screen 
+        name="details"
+        component={Details}
+        options={{
+        tabBarButton: () => null
+        }}
+      />
+
+
     </Navigator>
   )
  }
