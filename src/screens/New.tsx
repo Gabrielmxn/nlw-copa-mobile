@@ -1,4 +1,4 @@
-import { Heading, Text, VStack } from "native-base";
+import { Heading, Text, VStack, useToast } from "native-base";
 import { Header } from "../components/Header";
 
 import Logo from '../assets/logo.svg';
@@ -7,18 +7,45 @@ import { Input } from "../components/Input";
 import { Button } from "../components/Button";
 import { api } from "../services/api";
 
+
 export function New(){
   const [namePoll, setNamePool] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
 
-  function handleNamePool(text: string){
-    setNamePool(text)
-  }
-  async function newCreatePool(){
-   const { data } = await api.post('pools', {
-    title: namePoll
-   })
+  const toast = useToast();
 
-   setNamePool('');
+  async function handlePoolCreate(){
+    if (!namePoll.trim()){
+      return toast.show({
+        title: 'Informe um nome para o seu bolão',
+        placement: 'top',
+        bgColor: 'red.500'
+      })
+    }
+   try{
+    setIsLoading(true)
+    const { data } = await api.post('pools', {
+      title: namePoll
+     })
+    
+     setNamePool('');
+
+     return toast.show({
+      title: data.code,
+      placement: 'top',
+      bgColor: 'green.500'
+    })
+
+   }catch(err){
+    return toast.show({
+      title: "Não foi possível criar o bolão",
+      placement: 'top',
+      bgColor: 'red.500'
+    })
+   } finally{
+    setIsLoading(false)
+   }
+   
   }
   return(
     <VStack flex={1} bgColor="gray.900">
@@ -35,11 +62,12 @@ export function New(){
           mb={2}
           placeholder="Qual nome do seu bolão?"
           value={namePoll}
-          onChangeText={handleNamePool}
+          onChangeText={setNamePool}
         />
         <Button 
           title="CRIAR MEU BALÃO"
-          onPress={newCreatePool} 
+          onPress={handlePoolCreate} 
+          isLoading={isLoading}
         />
         <Text textAlign="center" color="gray.200" fontSize="sm" px={10} mt={4}>Após criar seu bolão, você receberá um código único que poderá usar para convidar outras pessoas.</Text>
       </VStack>
