@@ -1,13 +1,29 @@
+import { useEffect } from 'react';
+
 import { Box, Heading, Icon, Text, VStack } from "native-base";
 import { Header } from "../components/Header";
 import { MagnifyingGlass } from 'phosphor-react-native'
 import Logo from '../assets/logo.svg';
 import { Input } from "../components/Input";
 import { Button } from "../components/Button";
+
+
 import { ButtonIcon } from "../components/ButtonIcon";
 import { EmptyPoolList } from "../components/EmptyPoolList";
+import { useNavigation } from "@react-navigation/native";
+import { api } from '../services/api';
 
-export function MyPool(){
+export function Pools(){
+  const navigation = useNavigation();
+  useEffect(() => {
+    async function getPools() {
+      const { data} = await api.get('/pools');
+
+      console.log(data)
+    }
+    getPools();
+  }, [])
+
   return(
     <VStack flex={1} bgColor="gray.900">
       <Header title="Meus bolões" />
@@ -16,6 +32,7 @@ export function MyPool(){
         <Button
           title="BUSCAR BOLÃO POR CÓDIGO"
           leftIcon={<Icon as={MagnifyingGlass} color="black"/>}
+          onPress={() => navigation.navigate('find')}
         >
           
         </Button>
