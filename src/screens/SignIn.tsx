@@ -10,7 +10,7 @@ import { GoogleLogo } from "phosphor-react-native";
 import { useAuth } from "../hooks/useAuth";
 
 export function SignIn(){
-  const {signIn, user } = useAuth()
+  const {signIn, isUserLoading } = useAuth()
   return(
     <Center flex={1} bgColor="#121214" padding={22}>
         <Logo width={212} height={40}/>
@@ -21,6 +21,10 @@ export function SignIn(){
           type="SECONDARY"
           mt={12}
           onPress={signIn}
+          isLoading={false}
+          _loading={{
+            _spinner: { color: 'yellow.500' }
+          }}
         />
         <Text color={THEME.colors.white} fontSize={14} textAlign="center" mt={4}>
           Não utilizamos nenhuma informação além do seu e-mail para criação de sua conta.
